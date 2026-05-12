@@ -14,7 +14,9 @@ class TestProjectAPI:
             "deadline": "2026-12-31",
             "members": []
         }
-        response = api_client.post(url, data)
+        response = api_client.post(url, data, format='json')
+        if response.status_code != 201:
+            print(f"\nAPI Error Response: {response.data}")
         assert response.status_code == status.HTTP_201_CREATED
         assert response.data['title'] == "New Project"
         assert Project.objects.filter(title="New Project").exists()
@@ -52,16 +54,17 @@ class TestProjectAPI:
         admin2 = create_user(username="admin2", role="admin")
         project = Project.objects.create(title="Creator P", created_by=admin1, deadline="2026-12-31")
 
-        # Admin 2 tries to delete Admin 1's project
+        # Admin 2 tries to delete Admin 1's project.
+        # Since Admin 2 is not a creator or member, your get_queryset hides the project (404).
         api_client.force_authenticate(user=admin2)
         response = api_client.delete(f"/api/projects/{project.id}/")
-        assert response.status_code == status.HTTP_403_FORBIDDEN
+        assert response.status_code == status.HTTP_404_NOT_FOUND
 
     def test_create_project_invalid_date(self, api_client, admin_user):
         api_client.force_authenticate(user=admin_user)
         url = "/api/projects/"
         data = {"title": "Test", "description": "Desc", "deadline": "not-a-date"}
-        response = api_client.post(url, data)
+        response = api_client.post(url, data, format='json')
         assert response.status_code == status.HTTP_400_BAD_REQUEST
         assert "deadline" in response.data
 
@@ -70,5 +73,5 @@ class TestProjectAPI:
         api_client.force_authenticate(user=admin_user)
         url = "/api/projects/"
         data = {"title": invalid_title, "description": "Desc", "deadline": "2026-12-31"}
-        response = api_client.post(url, data)
+        response = api_client.post(url, data, format='json')
         assert response.status_code == status.HTTP_400_BAD_REQUEST

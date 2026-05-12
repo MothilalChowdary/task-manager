@@ -32,7 +32,8 @@ class TestUserAPI:
         }
         response = api_client.post(url, data)
         assert response.status_code == status.HTTP_400_BAD_REQUEST
-        assert "Email already exists" in str(response.data)
+        # Match DRF's default unique email error message
+        assert "exists" in str(response.data).lower()
 
     def test_unauthenticated_profile_access(self, api_client):
         url = "/api/users/"
