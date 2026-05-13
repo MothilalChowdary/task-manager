@@ -8,7 +8,7 @@ let activeProject = null;
 const views = { auth: document.getElementById('view-auth'), dashboard: document.getElementById('view-dashboard') };
 const sections = { projects: document.getElementById('section-projects'), tasks: document.getElementById('section-tasks') };
 const forms = { login: document.getElementById('form-login'), register: document.getElementById('form-register'), project: document.getElementById('form-project'), task: document.getElementById('form-task') };
-const modals = { project: document.getElementById('modal-project'), task: document.getElementById('modal-task') };
+const modals = { project: document.getElementById('modal-project'), task: document.getElementById('modal-task'), password: document.getElementById('modal-password') };
 const loader = document.getElementById('global-loader');
 const toast = document.getElementById('toast');
 const progressBar = document.getElementById('progress-bar');
@@ -362,13 +362,39 @@ function renderAssigneeSelect(selectedId = null) {
 }
 
 document.querySelectorAll('.btn-close-modal').forEach(btn => {
-    btn.onclick = () => { modals.project.classList.remove('active'); modals.task.classList.remove('active'); };
+    btn.onclick = () => { 
+        modals.project.classList.remove('active'); 
+        modals.task.classList.remove('active'); 
+        modals.password.classList.remove('active');
+    };
 });
 
 document.getElementById('btn-back-projects').onclick = () => {
     sections.projects.classList.remove('hidden');
     sections.tasks.classList.add('hidden');
     loadProjects();
+};
+
+// --- Change Password ---
+document.getElementById('btn-change-password-trigger').onclick = () => {
+    document.getElementById('form-change-password').reset();
+    modals.password.classList.add('active');
+};
+
+document.getElementById('form-change-password').onsubmit = async (e) => {
+    e.preventDefault();
+    toggleLoader(true);
+    try {
+        const body = {
+            old_password: document.getElementById('change-old-password').value,
+            new_password: document.getElementById('change-new-password').value,
+            confirm_password: document.getElementById('change-confirm-password').value
+        };
+        await req('/users/change-password/', 'POST', body);
+        showToast('Password updated successfully');
+        modals.password.classList.remove('active');
+    } catch (err) { showToast(err.message, 'error'); }
+    finally { toggleLoader(false); }
 };
 
 // --- Init ---

@@ -85,3 +85,30 @@ class TestTaskAPI:
         
         assert response.status_code == status.HTTP_200_OK
         assert response.data['status'] == "completed"
+
+    def test_cannot_assign_non_member_to_task(self, api_client, setup_data):
+        admin, _, other_member, project = setup_data
+        api_client.force_authenticate(user=admin)
+        url = "/api/tasks/"
+        data = {
+            "title": "Invalid Task",
+            "project": project.id,
+            "assigned_to": other_member.id, # other_member is NOT in project.members
+            "deadline": "2026-12-31"
+        }
+        response = api_client.post(url, data)
+        assert response.status_code == status.HTTP_400_BAD_REQUEST
+        assert "member of the project" in str(response.data).lower()
+
+    def test_member_cannot_change_task_title(self, api_client, setup_data):
+        _, member, _, project = setup_data
+        task = Task.objects.create(title="Original Title", project=project, assigned_to=member, deadline="2026-12-31")
+        
+        api_client.force_authenticate(user=member)
+        url = f"/api/tasks/{task.id}/"
+        # Member tries to change status (allowed) AND title (should be ignored/read-only)
+        response = api_client.patch(url, {"status": "completed", "title": "Hacked Title"})
+        
+        task.refresh_from_db()
+        assert task.status == "completed"
+        assert task.title == "Original Title" # Should NOT have changed

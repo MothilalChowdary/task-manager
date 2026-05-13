@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>TaskFlow | Advanced Project Management</title>
     <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
 
     <!-- Top Progress Bar -->
@@ -25,7 +27,7 @@
             <div class="logo" style="font-size: 3rem; margin-bottom: 1rem;">TaskFlow</div>
             <div class="card" style="text-align: left; cursor: default;">
                 <h2 id="auth-title" style="margin-bottom: 1.5rem;">Sign In</h2>
-                
+
                 <form id="form-login">
                     <div class="form-group">
                         <label>Username</label>
@@ -35,7 +37,8 @@
                         <label>Password</label>
                         <input type="password" id="login-password" required>
                     </div>
-                    <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Login</button>
+                    <button type="submit" class="btn btn-primary"
+                        style="width: 100%; justify-content: center;">Login</button>
                 </form>
 
                 <form id="form-register" class="hidden">
@@ -51,11 +54,14 @@
                         <label>Password</label>
                         <input type="password" id="reg-password" required>
                     </div>
-                    <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Register</button>
+                    <button type="submit" class="btn btn-primary"
+                        style="width: 100%; justify-content: center;">Register</button>
                 </form>
 
                 <div style="margin-top: 1.5rem; text-align: center;">
-                    <a href="#" id="btn-toggle-auth" style="color: var(--primary); text-decoration: none; font-size: 0.9rem;">Don't have an account? Register</a>
+                    <a href="#" id="btn-toggle-auth"
+                        style="color: var(--primary); text-decoration: none; font-size: 0.9rem;">Don't have an account?
+                        Register</a>
                 </div>
             </div>
         </div>
@@ -67,6 +73,7 @@
             <div class="logo">TaskFlow</div>
             <div style="display: flex; gap: 1rem; align-items: center;">
                 <span id="display-user" style="color: var(--text-muted); font-size: 0.9rem;"></span>
+                <button id="btn-change-password-trigger" class="btn btn-outline">Change Password</button>
                 <button id="btn-logout" class="btn btn-outline">Logout</button>
             </div>
         </header>
@@ -118,13 +125,16 @@
                 </div>
                 <div class="form-group">
                     <label>Team Members</label>
-                    <div id="member-select-list" style="max-height: 150px; overflow-y: auto; border: 1px solid var(--border); padding: 0.5rem; border-radius: 8px;">
+                    <div id="member-select-list"
+                        style="max-height: 150px; overflow-y: auto; border: 1px solid var(--border); padding: 0.5rem; border-radius: 8px;">
                         <!-- User checkboxes here -->
                     </div>
                 </div>
                 <div style="display: flex; gap: 1rem; margin-top: 2rem;">
-                    <button type="submit" class="btn btn-primary" style="flex: 1; justify-content: center;">Save Project</button>
-                    <button type="button" class="btn btn-outline btn-close-modal" style="flex: 1; justify-content: center;">Cancel</button>
+                    <button type="submit" class="btn btn-primary" style="flex: 1; justify-content: center;">Save
+                        Project</button>
+                    <button type="button" class="btn btn-outline btn-close-modal"
+                        style="flex: 1; justify-content: center;">Cancel</button>
                 </div>
             </form>
         </div>
@@ -172,7 +182,33 @@
                     </select>
                 </div>
                 <div style="display: flex; gap: 1rem; margin-top: 2rem;">
-                    <button type="submit" class="btn btn-primary" style="flex: 1; justify-content: center;">Save Task</button>
+                    <button type="submit" class="btn btn-primary" style="flex: 1; justify-content: center;">Save
+                        Task</button>
+                    <button type="button" class="btn btn-outline btn-close-modal"
+                        style="flex: 1; justify-content: center;">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="modal-password" class="modal">
+        <div class="modal-content">
+            <h2>Change Password</h2>
+            <form id="form-change-password" style="margin-top: 1.5rem;">
+                <div class="form-group">
+                    <label>Old Password</label>
+                    <input type="password" id="change-old-password" required>
+                </div>
+                <div class="form-group">
+                    <label>New Password</label>
+                    <input type="password" id="change-new-password" required>
+                </div>
+                <div class="form-group">
+                    <label>Confirm New Password</label>
+                    <input type="password" id="change-confirm-password" required>
+                </div>
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button type="submit" class="btn btn-primary" style="flex: 1; justify-content: center;">Update Password</button>
                     <button type="button" class="btn btn-outline btn-close-modal" style="flex: 1; justify-content: center;">Cancel</button>
                 </div>
             </form>
@@ -181,4 +217,5 @@
 
     <script src="app.js"></script>
 </body>
+
 </html>
