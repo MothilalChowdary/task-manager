@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TaskFlow | Advanced Project Management</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Top Progress Bar -->
+    <div id="progress-bar"></div>
+
+    <!-- Global Loader -->
+    <div id="global-loader" class="loader-container hidden">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast">Message here</div>
+
+    <!-- Auth View -->
+    <div id="view-auth" class="container">
+        <div style="max-width: 450px; margin: 100px auto; text-align: center;">
+            <div class="logo" style="font-size: 3rem; margin-bottom: 1rem;">TaskFlow</div>
+            <div class="card" style="text-align: left; cursor: default;">
+                <h2 id="auth-title" style="margin-bottom: 1.5rem;">Sign In</h2>
+                
+                <form id="form-login">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" id="login-username" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="login-password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Login</button>
+                </form>
+
+                <form id="form-register" class="hidden">
+                    <div class="form-group">
+                        <label>Username</label>
+                        <input type="text" id="reg-username" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Email</label>
+                        <input type="email" id="reg-email" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Password</label>
+                        <input type="password" id="reg-password" required>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;">Register</button>
+                </form>
+
+                <div style="margin-top: 1.5rem; text-align: center;">
+                    <a href="#" id="btn-toggle-auth" style="color: var(--primary); text-decoration: none; font-size: 0.9rem;">Don't have an account? Register</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard View -->
+    <div id="view-dashboard" class="container hidden">
+        <header>
+            <div class="logo">TaskFlow</div>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <span id="display-user" style="color: var(--text-muted); font-size: 0.9rem;"></span>
+                <button id="btn-logout" class="btn btn-outline">Logout</button>
+            </div>
+        </header>
+
+        <section id="section-projects">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <h2>Your Projects</h2>
+                <button id="btn-new-project" class="btn btn-primary hidden">+ New Project</button>
+            </div>
+            <div id="project-list" class="grid">
+                <!-- Projects go here -->
+            </div>
+        </section>
+
+        <section id="section-tasks" class="hidden">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem;">
+                <div style="display: flex; align-items: center; gap: 1rem;">
+                    <button id="btn-back-projects" class="btn btn-outline" style="padding: 0.5rem;">←</button>
+                    <h2 id="current-project-name">Project Name</h2>
+                </div>
+                <div style="display: flex; gap: 0.5rem;">
+                    <button id="btn-edit-project" class="btn btn-outline hidden">Edit Project</button>
+                    <button id="btn-new-task" class="btn btn-primary hidden">+ Add Task</button>
+                </div>
+            </div>
+            <div id="task-list" class="grid">
+                <!-- Tasks go here -->
+            </div>
+        </section>
+    </div>
+
+    <!-- Modals -->
+    <div id="modal-project" class="modal">
+        <div class="modal-content">
+            <h2 id="modal-project-title">Create Project</h2>
+            <form id="form-project" style="margin-top: 1.5rem;">
+                <input type="hidden" id="project-id-field">
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" id="project-title" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="project-desc" rows="3" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label>Deadline</label>
+                    <input type="date" id="project-deadline" required>
+                </div>
+                <div class="form-group">
+                    <label>Team Members</label>
+                    <div id="member-select-list" style="max-height: 150px; overflow-y: auto; border: 1px solid var(--border); padding: 0.5rem; border-radius: 8px;">
+                        <!-- User checkboxes here -->
+                    </div>
+                </div>
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button type="submit" class="btn btn-primary" style="flex: 1; justify-content: center;">Save Project</button>
+                    <button type="button" class="btn btn-outline btn-close-modal" style="flex: 1; justify-content: center;">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="modal-task" class="modal">
+        <div class="modal-content">
+            <h2 id="modal-task-title">Create Task</h2>
+            <form id="form-task" style="margin-top: 1.5rem;">
+                <input type="hidden" id="task-id-field">
+                <div class="form-group">
+                    <label>Task Title</label>
+                    <input type="text" id="task-title" required>
+                </div>
+                <div class="form-group">
+                    <label>Description</label>
+                    <textarea id="task-desc" rows="3" required></textarea>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+                    <div class="form-group">
+                        <label>Priority</label>
+                        <select id="task-priority">
+                            <option value="low">Low</option>
+                            <option value="medium" selected>Medium</option>
+                            <option value="high">High</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Deadline</label>
+                        <input type="date" id="task-deadline" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label>Assignee</label>
+                    <select id="task-assignee" required>
+                        <!-- Project members here -->
+                    </select>
+                </div>
+                <div class="form-group" id="task-status-group">
+                    <label>Status</label>
+                    <select id="task-status">
+                        <option value="pending">Pending</option>
+                        <option value="in_progress">In Progress</option>
+                        <option value="completed">Completed</option>
+                    </select>
+                </div>
+                <div style="display: flex; gap: 1rem; margin-top: 2rem;">
+                    <button type="submit" class="btn btn-primary" style="flex: 1; justify-content: center;">Save Task</button>
+                    <button type="button" class="btn btn-outline btn-close-modal" style="flex: 1; justify-content: center;">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
