@@ -34,7 +34,7 @@ class TestTaskAPI:
         _, member, _, project = setup_data
         api_client.force_authenticate(user=member)
         url = "/api/tasks/"
-        data = {"title": "No", "project": project.id, "assigned_to": member.id, "deadline": "2026-12-31"}
+        data = {"title": "No", "description": "No", "project": project.id, "assigned_to": member.id, "deadline": "2026-12-31"}
         response = api_client.post(url, data)
         assert response.status_code == status.HTTP_403_FORBIDDEN
 
@@ -92,6 +92,7 @@ class TestTaskAPI:
         url = "/api/tasks/"
         data = {
             "title": "Invalid Task",
+            "description": "Invalid Desc",
             "project": project.id,
             "assigned_to": other_member.id, # other_member is NOT in project.members
             "deadline": "2026-12-31"
